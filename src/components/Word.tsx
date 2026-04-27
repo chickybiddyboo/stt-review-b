@@ -97,15 +97,12 @@ export default function Word({
             : estimateWordStartTime(seg.startTime, seg.endTime, wordIndex, seg.words.length);
           ws.seekTo(wordTime / dur);
           if (em) {
-            // 다른 단어 루프 중이면 중지
+            // 수정 모드: 문장 전체(세그먼트) 재생 후 정지
             setEditLoopWord(null);
             const { playbackRate } = useReviewStore.getState();
-            const wordEnd = seg.wordTimings
-              ? seg.wordTimings[wordIndex].endTime
-              : estimateWordEndTime(seg.startTime, seg.endTime, wordIndex, seg.words.length);
-            const wordDuration = wordEnd - wordTime;
+            const segDuration = seg.endTime - wordTime;
             ws.play();
-            setTimeout(() => ws.pause(), (wordDuration * 1000) / playbackRate);
+            setTimeout(() => ws.pause(), (segDuration * 1000) / playbackRate);
           }
         }
       }
