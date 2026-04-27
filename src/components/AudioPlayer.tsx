@@ -13,6 +13,7 @@ export default function AudioPlayer() {
     isPlaying,
     currentTime,
     playbackRate,
+    editMode,
     setIsPlaying,
     setPlaybackRate,
   } = useReviewStore();
@@ -133,7 +134,7 @@ export default function AudioPlayer() {
           <span className="text-xs font-medium text-blue-600 w-8 text-center tabular-nums flex-shrink-0">
             {playbackRate.toFixed(2)}x
           </span>
-          <div className="flex items-center gap-1 ml-1">
+          {!editMode && <div className="flex items-center gap-1 ml-1">
             {[1.0, 1.25, 1.5, 2.0, 3.0].map((v) => (
               <button
                 key={v}
@@ -147,7 +148,7 @@ export default function AudioPlayer() {
                 {v % 1 === 0 ? `${v}.0` : v}x
               </button>
             ))}
-          </div>
+          </div>}
         </div>
       </div>
     </div>
