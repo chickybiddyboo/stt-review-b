@@ -36,7 +36,7 @@ export default function ScriptSegment({
   fontSize,
 }: ScriptSegmentProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const { setActivePanel } = useReviewStore();
+  const { setActivePanel, editMode, playbackRate } = useReviewStore();
 
   useEffect(() => {
     if (isActive && ref.current) {
@@ -53,7 +53,15 @@ export default function ScriptSegment({
     if (!ws) return;
     setActivePanel('script');
     const dur = ws.getDuration();
-    if (dur > 0) ws.seekTo(segment.startTime / dur);
+    if (dur > 0) {
+      ws.seekTo(segment.startTime / dur);
+      if (editMode) {
+        // 수정 모드: 문장 전체 재생 후 정지
+        const segDuration = segment.endTime - segment.startTime;
+        ws.play();
+        setTimeout(() => ws.pause(), (segDuration * 1000) / playbackRate);
+      }
+    }
   };
 
   const speakerColor = segment.speaker
