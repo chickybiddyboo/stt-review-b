@@ -148,37 +148,20 @@ export default function Word({
   }
 
   return (
-    <span className="inline-flex items-center">
-      <span
-        onClick={handleClick}
-        className={`relative inline-block px-1 py-0.5 mx-0.5 rounded cursor-pointer transition-colors leading-relaxed ${boxStyle}`}
-        title={isCorrected ? `원본: ${text}` : undefined}
-      >
-        {displayText}
-        {hasReviewNote && (
-          <svg
-            className="absolute -top-1.5 -right-1 text-amber-500"
-            width="8" height="8" viewBox="0 0 24 24"
-            fill="currentColor" stroke="none"
-          >
-            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-          </svg>
-        )}
-      </span>
-
-      {/* 수정 모드 반복 재생 버튼 */}
-      {editMode && (
-        <button
-          onClick={handleLoopClick}
-          className={`ml-0.5 mr-1 w-4 h-4 flex items-center justify-center rounded-full text-xs transition-colors flex-shrink-0
-            ${isLooping
-              ? 'bg-blue-500 text-white'
-              : 'text-gray-300 hover:text-blue-400'
-            }`}
-          title={isLooping ? '반복 중지' : '반복 재생'}
+    <span
+      onClick={handleClick}
+      className={`relative inline-block px-1 py-0.5 mx-0.5 rounded cursor-pointer transition-colors leading-relaxed ${boxStyle}`}
+      title={isCorrected ? `원본: ${text}` : undefined}
+    >
+      {displayText}
+      {hasReviewNote && (
+        <svg
+          className="absolute -top-1.5 -right-1 text-amber-500"
+          width="8" height="8" viewBox="0 0 24 24"
+          fill="currentColor" stroke="none"
         >
-          ↻
-        </button>
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+        </svg>
       )}
     </span>
   );
