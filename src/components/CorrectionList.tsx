@@ -4,6 +4,8 @@ import { useRef, useEffect, useCallback, useState, forwardRef, useImperativeHand
 import { useReviewStore, wavesurferRef } from '@/stores/review-store';
 import { Correction, SrtSegment } from '@/types';
 import { estimateWordStartTime, estimateWordEndTime } from '@/lib/time-utils';
+import { exportSrt, downloadSrt } from '@/lib/srt-exporter';
+import { downloadCorrectionReport } from '@/lib/docx-exporter';
 
 type EditorHandle = { focus: () => void };
 
@@ -177,8 +179,17 @@ const CorrectionEditor = forwardRef<EditorHandle, {
 });
 
 export default function CorrectionList() {
-  const { corrections, segments, setActivePanel, addCorrection, removeCorrection, setActiveSegmentIndex, editMode, setEditMode } = useReviewStore();
+  const { corrections, segments, srtFileName, setActivePanel, addCorrection, removeCorrection, setActiveSegmentIndex, editMode, setEditMode } = useReviewStore();
   const editorRefs = useRef<(EditorHandle | null)[]>([]);
+
+  const handleSave = () => {
+    const srt = exportSrt(segments, corrections);
+    downloadSrt(srt, srtFileName);
+  };
+
+  const handleDownloadReport = () => {
+    downloadCorrectionReport(segments, corrections, srtFileName);
+  };
 
   const handleCorrectionClick = (segmentIndex: number) => {
     const arrayIdx = segments.findIndex((s) => s.index === segmentIndex);
@@ -304,6 +315,21 @@ export default function CorrectionList() {
             })}
           </ul>
         )}
+      </div>
+
+      {/* 저장 버튼 */}
+      <div className="px-4 py-3 border-t border-gray-200 flex-shrink-0">
+        <button
+          onClick={(e) => { e.stopPropagation(); handleDownloadReport(); }}
+          disabled={corrections.length === 0}
+          className={`w-full py-2 rounded-lg text-sm font-medium transition-colors ${
+            corrections.length > 0
+              ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+              : 'bg-gray-100 text-gray-300 cursor-not-allowed'
+          }`}
+        >
+          검수한 스크립트 다운로드
+        </button>
       </div>
 
     </div>
