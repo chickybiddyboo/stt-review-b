@@ -4,7 +4,6 @@ import { useRef, useEffect, useCallback, useState, forwardRef, useImperativeHand
 import { useReviewStore, wavesurferRef } from '@/stores/review-store';
 import { Correction, SrtSegment } from '@/types';
 import { estimateWordStartTime, estimateWordEndTime } from '@/lib/time-utils';
-import { exportSrt, downloadSrt } from '@/lib/srt-exporter';
 import { downloadCorrectionReport } from '@/lib/docx-exporter';
 
 type EditorHandle = { focus: () => void };
@@ -182,11 +181,6 @@ export default function CorrectionList() {
   const { corrections, segments, srtFileName, setActivePanel, addCorrection, removeCorrection, setActiveSegmentIndex, editMode, setEditMode } = useReviewStore();
   const editorRefs = useRef<(EditorHandle | null)[]>([]);
 
-  const handleSave = () => {
-    const srt = exportSrt(segments, corrections);
-    downloadSrt(srt, srtFileName);
-  };
-
   const handleDownloadReport = () => {
     downloadCorrectionReport(segments, corrections, srtFileName);
   };
@@ -328,7 +322,7 @@ export default function CorrectionList() {
               : 'bg-gray-100 text-gray-300 cursor-not-allowed'
           }`}
         >
-          검수한 스크립트 다운로드
+          검수 내용 저장
         </button>
       </div>
 
